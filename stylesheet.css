@@ -9,6 +9,12 @@ padding:2px 2px 2px 2px;
 color:blue;
 text-align: center;
 }
+#img-header{
+
+height:120px;
+width:120px;
+display:inline;
+}
 #div-HW1{
 margin:2px 2px 2px 2px;
 background-color:#FFFF99;
@@ -27,7 +33,7 @@ font-size:16px;
 margin:1px 1px 1px 1px;
 border:solid 1px black;
 max-width:50px;
-font-weight:normal;
+font-weight:bold;
 }
 #tbl2-HW1{
 width:auto;
