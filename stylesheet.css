@@ -1,7 +1,35 @@
 
-*{
-  font-style:Impact;
+#div-header{
+margin:2px 2px 2px 2px;
+background-color:#FFFF99;
+border:1px solid black;
+border-radius:2px;
+margin:2px 2px 2px 2px;
+padding:2px 2px 2px 2px;
+color:blue;
+text-align: center;
 }
-h1{
-  font-size:45px;
+#div-HW1{
+margin:2px 2px 2px 2px;
+background-color:#FFFF99;
+border:1px solid black;
+border-radius:2px;
+padding:2px 2px 2px 2px;
+color:blue;
+text-align: center;
+float:center
+table-align:center;
+}
+#tbl-HW1{
+float:center;
+width:600px;
+height:200px;
+border:1px solid black;
+margin:2px 2px 2px 2px;
+padding:2px 2px 2px 2px;
+text-align: center;
+font-size:20px;
+}
+tr{
+border=1px solid black;
 }
