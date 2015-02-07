@@ -17,19 +17,24 @@ border-radius:2px;
 padding:2px 2px 2px 2px;
 color:blue;
 text-align: center;
-float:center
-table-align:center;
+font-size: 18px;
 }
-#tbl-HW1{
-float:center;
-width:600px;
-height:200px;
-border:1px solid black;
-margin:2px 2px 2px 2px;
-padding:2px 2px 2px 2px;
-text-align: center;
-font-size:20px;
+#tbl1-HW1{
+width:auto;
+height:auto;
+margin:1px 1px 1px 1px;
+font-size:16px;
+margin:1px 1px 1px 1px;
+border:solid 1px black;
+max-width:50px;
+font-weight:normal;
 }
-tr{
-border=1px solid black;
-}
+#tbl2-HW1{
+width:auto;
+height:auto;
+margin:1px 1px 1px 1px;
+font-size:16px;
+margin:1px 1px 1px 1px;
+border:solid 1px black;
+max-width:300px;
+font-weight:normal;
