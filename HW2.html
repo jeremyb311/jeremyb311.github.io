@@ -50,7 +50,7 @@
 					<!-- Determine Ranking -->	
 					for (var i=0; i<GradData.length;i++){
 						for (var j=0; j<GradData.length;j++){
-							if (GradData[j].Weighted < GradData[i].Weighted){GradData[i].Ranking = GradData[i].Ranking + 1;}
+							if (GradData[j].Weighted > GradData[i].Weighted){GradData[i].Ranking = GradData[i].Ranking + 1;}
 						}
 					}
 					<!-- Populate Table -->	
