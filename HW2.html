@@ -1,49 +1,88 @@
 <!DOCTYPE html>
-
 <html>
     <head>
+		<!-- Initialize D3, jQuery, and Table Sorter -->
         <title>HW2</title>
         <meta charset="utf-8">
 		<script src="http://d3js.org/d3.v3.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script type="text/javascript" src="TableSorter/jquery.tablesorter.min.js"></script>
     </head>
     <body>
+		<!-- Generic Information -->
 		<h4><a href="index.html">HOME</a></h4>
 		<h3> HW#2: Create Table for Applicants & Project Page</h3>
 		<h4>Due 2/15/2015</h4>
 		<h4><a href="http://teampta.github.io/group.html">1. Project Page for Team PTA</a></h4>
-		<h4>2. Grad Student Table</h4>
-		
+		<h4>2. Grad Student Table - Click Header to Sort (Was trying with jQ plugin, but could not get it to work.)</h4>
+		<!-- Table formatting -->
 		<style>
 			table,th{border:1px solid black;padding:10px}
 			td{text-align:center; border: 1px solid gray}
 		</style>
-		
-		<table id="GradTable">
-				<th>Student Name</th>
-				<th>GPA</th>
-				<th>GRE_V</th>
-				<th>GRE_Q</th>
-				<th>Essay</th>
-				<th>Recom</th>
-				<th style="color:red">Total</th>
-				<th style="color:red">Ranking</th>
+		<!-- Initialize Table-->
+		<table id="GradTable" class="tablesorter">
+			<thead>
+				<tr>
+					<th>Student Name</th>
+					<th>GPA</th>
+					<th>GRE_V</th>
+					<th>GRE_Q</th>
+					<th>Essay</th>
+					<th>Recom</th>
+					<th style="color:red">Total</th>
+					<th style="color:red">Weighted Total</th>
+					<th style="color:red">Ranking</th>
+				</tr>
+			</thead>
+			<tbody>	<tr></tr></tbody>
 		</table>
-		
+		<!-- Script to Populate Table -->	
 		<script type"text/javascript">
+				<!-- Get Table -->	
 				d3.json("https://hivelab.org/static/students.json",function(GradData){
-				for (var i=0; i<GradData.length;i++){
-					var newRow=d3.select("tbody").append("tr");
-					newRow.append("td").text(GradData[i].Name);
-					newRow.append("td").text(GradData[i].GPA);
-					newRow.append("td").text(GradData[i].GRE_V);
-					newRow.append("td").text(GradData[i].GRE_Q);
-					newRow.append("td").text(GradData[i].Essay);
-					newRow.append("td").text(GradData[i].Recom);
-				}
+					<!-- Calculated Fields Weighted used later for ranking -->	
+					for (var i=0; i<GradData.length;i++){
+						GradData[i].Raw = GradData[i].GPA + GradData[i].GRE_V + GradData[i].GRE_Q + GradData[i].Essay + GradData[i].Recom;
+						GradData[i].Weighted = GradData[i].GPA/4*4 + GradData[i].GRE_V/170 + GradData[i].GRE_Q/170 + GradData[i].Essay/5*2 + GradData[i].Recom/7*2;
+						GradData[i].Ranking = 1
+					}
+					<!-- Determine Ranking -->	
+					for (var i=0; i<GradData.length;i++){
+						for (var j=0; j<GradData.length;j++){
+							if (GradData[j].Weighted < GradData[i].Weighted){GradData[i].Ranking = GradData[i].Ranking + 1;}
+						}
+					}
+					<!-- Populate Table -->	
+					for (var i=0; i<GradData.length;i++){
+						var newRow=d3.select("tbody").append("tr");
+						newRow.append("td").text(GradData[i].Name);
+						newRow.append("td").text(GradData[i].GPA);
+						newRow.append("td").text(GradData[i].GRE_V);
+						newRow.append("td").text(GradData[i].GRE_Q);
+						newRow.append("td").text(GradData[i].Essay);
+						newRow.append("td").text(GradData[i].Recom);
+						newRow.append("td").text(GradData[i].Raw.toFixed(0));
+						newRow.append("td").text(GradData[i].Weighted.toFixed(2));
+						newRow.append("td").text(GradData[i].Ranking);
+					}
+				});
+		</script>
+		<!-- Formula Description -->	
+		<p style="font:20px"><strong><em>Ranking Determined by using Weighted Values</strong></em></p>
+		<p><strong>Weighted Formula Description:</strong></p>
+		<p>GPA maximum = 4. GRE maximum = 170. Assume Essay maximum = 5. Assume Recom maximum = 7.</p>
+		<p>Importance Factor = GPA: 4, GRE: 1 (per score), Essay: 2, and Recom: 2 </p>
+		<p>Weighted Values = Category Score / Maximum Value</p>
+		<p>Weighted Formula = Sum of Weighted Values * Importance Factor (Maximum of 10)</p>
+		
+		<script>
+			$(document).ready(function(){
+				$(function(){
+				$('#GradTable').tablesorter();
+				console.log("Hello?");
+				});
 			});
 		</script>
-
-		<p>Notes:</p>
     </body>
 </html>
