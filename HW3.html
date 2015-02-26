@@ -5,17 +5,224 @@
 	<title>EdComp</title>
 	<meta charset="utf-8">
 	<script src="http://d3js.org/d3.v3.js"></script>
+	<!-- Axis Format -->
+	<style type="text/css">
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: black;
+			shape-rendering: crispEdges;
+		}
+		.axis text {
+			font-family: sans-serif;
+			font-size: 11px;
+		}
+
+	</style>
+	<!-- Chart Formats -->
+	<style type="text/css">
+		#Chart1{
+			float:center;
+			display: inline-block;
+			border: solid blue 1px;
+		}
+		#Chart2{
+			float:center;
+			display: inline-block;
+			border: solid blue 1px;
+		}
+		#Chart3{
+			float:center;
+			display: inline-block;
+			border: solid blue 1px;
+		}
+	</style>
 </head>
 <body>
+	<!-- Chart Divs -->
+	<div id="Chart1"><h5><center>Math Scores versus Math Instructional Hours</center></h5></div>
+	<div id="Chart2"><h5><center>Science Scores versus Science Instructional Hours</center></h5></div>
+	<p>TEXT DISCUSSING LACK OF CORRELATION</p>
+	<div id="Chart3"><h5><center>Math Scores versus Science Scores</center></h5></div>
+	<p>TEXT SAYING THERE MUST BE OTHER FACTORS OTHER THAN INSTR HOURS THAT AFFECT TEST SCORES
+	SINCE THERE IS A CORRELATION BETWEEN HIGH SCORES IN BOTH CATEGORIES REGARDLESS OF INSTR HOURS
+	</p>
+	<!-- Create Chart 1 --> 
 	<script type"text/javascript">
-		d3.csv("http://jeremyb311.github.io/HW3.csv",function(d){
-		console.log(d);
-		});
-	
-	
-	
-	
-	</script>
+		//Variables
+		var w = 400;
+		var h = 300;
+		var padding = 30;
+			
+		//Grab csv and proceed with functions inside...try to figure out global variable?
+		d3.csv("HW3.csv",function(d){
+			
+			//Create scale functions
+			var xScale = d3.scale.linear()
+				.domain([0, d3.max(d, function(d) { return d.M_H; })])
+				.range([padding, w - padding * 2]);
 
+			var yScale = d3.scale.linear()
+				.domain([0, d3.max(d, function(d) { return d.M_S; })])
+				.range([h - padding, padding]);
+			
+			//Define X axis
+			var xAxis = d3.svg.axis()
+				.scale(xScale)
+				.orient("bottom")
+				.ticks(4)
+
+			//Define Y axis
+			var yAxis = d3.svg.axis()
+				.scale(yScale)
+				.orient("left")
+				.ticks(4)
+			
+			//Create svg 
+			var svg = d3.select("#Chart1")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+			
+			//Populate svgs with data
+			svg.selectAll("circle")
+				.data(d)
+				.enter()
+				.append("circle")
+				.attr("cx", function(d){return xScale(d.M_H)})
+				.attr("cy", function(d){return yScale(d.M_S)})
+				.attr("r",3);
+			
+			//Create X axis
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(0," + (h - padding) + ")")
+				.call(xAxis);
+			
+			//Create Y axis
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(" + padding + ",0)")
+				.call(yAxis);
+		});
+	</script>
+	<!-- Create Chart 2 --> 
+	<script type"text/javascript">
+		//Variables
+		var w = 400;
+		var h = 300;
+		var padding = 30;
+			
+		//Grab csv and proceed with functions inside...try to figure out global variable?
+		d3.csv("HW3.csv",function(d){
+			
+			//Create scale functions
+			var xScale = d3.scale.linear()
+				.domain([0, d3.max(d, function(d) { return d.S_H; })])
+				.range([padding, w - padding * 2]);
+
+			var yScale = d3.scale.linear()
+				.domain([0, d3.max(d, function(d) { return d.S_S; })])
+				.range([h - padding, padding]);
+			
+			//Define X axis
+			var xAxis = d3.svg.axis()
+				.scale(xScale)
+				.orient("bottom")
+				.ticks(4)
+
+			//Define Y axis
+			var yAxis = d3.svg.axis()
+				.scale(yScale)
+				.orient("left")
+				.ticks(4)
+			
+			//Create svg 
+			var svg = d3.select("#Chart2")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+			
+			//Populate svgs with data
+			svg.selectAll("circle")
+				.data(d)
+				.enter()
+				.append("circle")
+				.attr("cx", function(d){return xScale(d.S_H)})
+				.attr("cy", function(d){return yScale(d.S_S)})
+				.attr("r",3);
+			
+			//Create X axis
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(0," + (h - padding) + ")")
+				.call(xAxis);
+			
+			//Create Y axis
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(" + padding + ",0)")
+				.call(yAxis);
+		});
+	</script>
+	<!-- Create Chart 3 --> 
+	<script type"text/javascript">
+		//Variables
+		var w = 400;
+		var h = 300;
+		var padding = 30;
+			
+		//Grab csv and proceed with functions inside...try to figure out global variable?
+		d3.csv("HW3.csv",function(d){
+			
+			//Create scale functions
+			var xScale = d3.scale.linear()
+				.domain([0, d3.max(d, function(d) { return d.S_S; })])
+				.range([padding, w - padding * 2]);
+
+			var yScale = d3.scale.linear()
+				.domain([0, d3.max(d, function(d) { return d.M_S; })])
+				.range([h - padding, padding]);
+			
+			//Define X axis
+			var xAxis = d3.svg.axis()
+				.scale(xScale)
+				.orient("bottom")
+				.ticks(4)
+
+			//Define Y axis
+			var yAxis = d3.svg.axis()
+				.scale(yScale)
+				.orient("left")
+				.ticks(4)
+			
+			//Create svg 
+			var svg = d3.select("#Chart3")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+			
+			//Populate svgs with data
+			svg.selectAll("circle")
+				.data(d)
+				.enter()
+				.append("circle")
+				.attr("cx", function(d){return xScale(d.S_S)})
+				.attr("cy", function(d){return yScale(d.M_S)})
+				.attr("r",3);
+			
+			//Create X axis
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(0," + (h - padding) + ")")
+				.call(xAxis);
+			
+			//Create Y axis
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(" + padding + ",0)")
+				.call(yAxis);
+		});
+	</script>
 </body>
 </html>
