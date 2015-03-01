@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>World Kidz</title>
 	<!-- Initialize D3 -->
-	<title>EdComp</title>
 	<meta charset="utf-8">
 	<script src="http://d3js.org/d3.v3.js"></script>
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-60141823-1', 'auto');
+		ga('send', 'pageview');
+	</script>
 	<!-- Axis Format -->
 	<style type="text/css">
 		.axis path,
@@ -14,50 +24,81 @@
 			shape-rendering: crispEdges;
 		}
 		.axis text {
-			font-family: sans-serif;
-			font-size: 11px;
+			font-family: Arial;
+			font-size: 9px;
 		}
-
+		circle:hover{
+		fill:black;
+		r:10px
+		}
 	</style>
 	<!-- Chart Formats -->
 	<style type="text/css">
-		#Chart1{
-			float:center;
+		*{font-family:Veranda}
+		#ScatterPlotM{
+			float:left;
 			display: inline-block;
 			border: solid blue 1px;
 		}
-		#Chart2{
-			float:center;
+		#ScatterPlotS{
+			float:left;
 			display: inline-block;
 			border: solid blue 1px;
 		}
-		#Chart3{
-			float:center;
+		#ScatterPlotF{
+			float:left;
 			display: inline-block;
 			border: solid blue 1px;
 		}
 	</style>
 </head>
 <body>
-	<!-- Chart Divs -->
-	<div id="Chart1"><h5><center>Math Scores versus Math Instructional Hours</center></h5></div>
-	<div id="Chart2"><h5><center>Science Scores versus Science Instructional Hours</center></h5></div>
-	<p>TEXT DISCUSSING LACK OF CORRELATION</p>
-	<div id="Chart3"><h5><center>Math Scores versus Science Scores</center></h5></div>
-	<p>TEXT SAYING THERE MUST BE OTHER FACTORS OTHER THAN INSTR HOURS THAT AFFECT TEST SCORES
-	SINCE THERE IS A CORRELATION BETWEEN HIGH SCORES IN BOTH CATEGORIES REGARDLESS OF INSTR HOURS
-	</p>
-	<!-- Create Chart 1 --> 
-	<script type"text/javascript">
-		//Variables
-		var w = 400;
-		var h = 300;
-		var padding = 30;
-			
-		//Grab csv and proceed with functions inside...try to figure out global variable?
+	<!-- Page Layout-->
+	<div id="header">
+		<h2>Welcome to World Kidz!</h2>
+		<p>
+			<strong>Introduction:</strong> The following data represents data taken from 4th grade students in various countries. 
+			Data shows test scores for Math and Science along with the total instructional hours for those subjects.
+			The actual numbers themselves are not that important, but look more at the pattern and trends (or lack thereof). 
+			<span style="color:blue"><strong>Hover over any data point to see the country.</strong></span> Enjoy!
+		</p>
+		<p>
+			<strong>Author:</strong> The following data has been prepared for Purdue Engineering Course IE590 by <strong><span style="color:blue">Jeremy Black</span></strong>
+		</p>
+		<p>
+			<strong>Source: </strong><a href="http://nces.ed.gov/programs/digest/d12/tables/dt12_460.asp">
+			The National Center for Education Statistics</a>
+		</p>
+		<p>
+			<strong>Tracking: </strong><a href="https://www.google.com/analytics/web/?hl=en#report/visitors-overview/a60141823w94490171p98497902/">Link</a>
+			 Tracking on Google Analytics only recently set-up so no interesting stats to share yet. Check back later
+		</p>
+			There is, however; a very high correlation between the two subjects. This suggests that there must be other contributing factors 
+			to students scores. As a proposal for further investigation I would look at socio-economic factors such as % of population living
+			below the poverty line. I would also consider cultural factors such as the amount of time parents spend on these subjects 
+			with their children outside of the class room.
+		<p>
+		<p>
+			On interesting trend was that Southeast Asian countries accounted for nearly all the top scores, while Middle Eastern 
+			and North African countries accounted for nearly all the bottom scores. United States and most Europe countries were in
+			the middle band.
+		<p>
+	</div>
+	<div id="ScatterPlotF"><h5><center>Math Scores versus Science Scores</center></h5></div>
+	<div id="ScatterPlotM"><h5><center><span style="color:blue">Math</span> Scores versus Hours of Instruction</center></h5></div>
+	<div id="ScatterPlotS"><h5><center><span style="color:green">Science</span> Scores versus Hours of Instruction</center></h5></div>
+
+	
+
+	<!--Create Charts -->
+	<script type"text/javascript">			
+		//Grab csv file and read in and create chart
 		d3.csv("HW3.csv",function(d){
-			
-			//Create scale functions
+			//Variables
+			var w = 400;
+			var h = 400;
+			var padding = 30;
+			//Create scale functions. Based on Math Values
 			var xScale = d3.scale.linear()
 				.domain([0, d3.max(d, function(d) { return d.M_H; })])
 				.range([padding, w - padding * 2]);
@@ -65,159 +106,142 @@
 			var yScale = d3.scale.linear()
 				.domain([0, d3.max(d, function(d) { return d.M_S; })])
 				.range([h - padding, padding]);
-			
-			//Define X axis
+			//Define X and Y Axis
 			var xAxis = d3.svg.axis()
 				.scale(xScale)
 				.orient("bottom")
-				.ticks(4)
-
-			//Define Y axis
+				.ticks(10)
 			var yAxis = d3.svg.axis()
 				.scale(yScale)
 				.orient("left")
-				.ticks(4)
-			
-			//Create svg 
-			var svg = d3.select("#Chart1")
+				.ticks(6)
+			//Populate Chart
+			var svg = d3.select("#ScatterPlotM")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
-			
-			//Populate svgs with data
 			svg.selectAll("circle")
 				.data(d)
 				.enter()
 				.append("circle")
 				.attr("cx", function(d){return xScale(d.M_H)})
 				.attr("cy", function(d){return yScale(d.M_S)})
-				.attr("r",3);
-			
-			//Create X axis
+				.attr("r",5)
+				.attr("fill","blue")
+				.attr("stroke","black")
+				.append("title")
+				.text(function(d){return d.N;})
+			//Create X and Y Axis
 			svg.append("g")
 				.attr("class", "axis")
 				.attr("transform", "translate(0," + (h - padding) + ")")
 				.call(xAxis);
-			
-			//Create Y axis
 			svg.append("g")
 				.attr("class", "axis")
 				.attr("transform", "translate(" + padding + ",0)")
 				.call(yAxis);
 		});
 	</script>
-	<!-- Create Chart 2 --> 
-	<script type"text/javascript">
-		//Variables
-		var w = 400;
-		var h = 300;
-		var padding = 30;
-			
-		//Grab csv and proceed with functions inside...try to figure out global variable?
+	<script type"text/javascript">			
+		//Grab csv file and read in and create chart
 		d3.csv("HW3.csv",function(d){
-			
-			//Create scale functions
+			//Variables
+			var w = 400;
+			var h = 400;
+			var padding = 30;
+			//Create scale functions. Based on Math Values
+			//Math numbers are always higher than Science so keeps charts similarly sized.
+			//I know this might not always be the case though.
 			var xScale = d3.scale.linear()
-				.domain([0, d3.max(d, function(d) { return d.S_H; })])
+				.domain([0, d3.max(d, function(d) { return d.M_H; })])
 				.range([padding, w - padding * 2]);
 
 			var yScale = d3.scale.linear()
-				.domain([0, d3.max(d, function(d) { return d.S_S; })])
+				.domain([0, d3.max(d, function(d) { return d.M_S; })])
 				.range([h - padding, padding]);
-			
-			//Define X axis
+			//Define X and Y Axis
 			var xAxis = d3.svg.axis()
 				.scale(xScale)
 				.orient("bottom")
-				.ticks(4)
-
-			//Define Y axis
+				.ticks(10)
 			var yAxis = d3.svg.axis()
 				.scale(yScale)
 				.orient("left")
-				.ticks(4)
-			
-			//Create svg 
-			var svg = d3.select("#Chart2")
+				.ticks(6)
+			//Populate Chart
+			var svg = d3.select("#ScatterPlotS")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
-			
-			//Populate svgs with data
 			svg.selectAll("circle")
 				.data(d)
 				.enter()
 				.append("circle")
 				.attr("cx", function(d){return xScale(d.S_H)})
 				.attr("cy", function(d){return yScale(d.S_S)})
-				.attr("r",3);
-			
-			//Create X axis
+				.attr("r",5)
+				.attr("fill","green")
+				.attr("stroke","black")
+				.append("title")
+				.text(function(d){return d.N;})
+			//Create X and Y Axis
 			svg.append("g")
 				.attr("class", "axis")
 				.attr("transform", "translate(0," + (h - padding) + ")")
 				.call(xAxis);
-			
-			//Create Y axis
 			svg.append("g")
 				.attr("class", "axis")
 				.attr("transform", "translate(" + padding + ",0)")
 				.call(yAxis);
 		});
 	</script>
-	<!-- Create Chart 3 --> 
-	<script type"text/javascript">
-		//Variables
-		var w = 400;
-		var h = 300;
-		var padding = 30;
-			
-		//Grab csv and proceed with functions inside...try to figure out global variable?
+	<script type"text/javascript">			
+		//Grab csv file and read in and create chart
 		d3.csv("HW3.csv",function(d){
-			
-			//Create scale functions
+			//Variables
+			var w = 600;
+			var h = 400;
+			var padding = 30;
+			//Create scale functions. Based on Math Values.
+			//Math numbers are always higher than Science so keeps charts similarly sized.
+			//I know this might not always be the case though.
 			var xScale = d3.scale.linear()
-				.domain([0, d3.max(d, function(d) { return d.S_S; })])
+				.domain([0, d3.max(d, function(d) { return d.M_S; })])
 				.range([padding, w - padding * 2]);
 
 			var yScale = d3.scale.linear()
 				.domain([0, d3.max(d, function(d) { return d.M_S; })])
 				.range([h - padding, padding]);
-			
-			//Define X axis
+			//Define X and Y Axis
 			var xAxis = d3.svg.axis()
 				.scale(xScale)
 				.orient("bottom")
-				.ticks(4)
-
-			//Define Y axis
+				.ticks(6)
 			var yAxis = d3.svg.axis()
 				.scale(yScale)
 				.orient("left")
-				.ticks(4)
-			
-			//Create svg 
-			var svg = d3.select("#Chart3")
+				.ticks(6)
+			//Populate Chart
+			var svg = d3.select("#ScatterPlotF")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
-			
-			//Populate svgs with data
 			svg.selectAll("circle")
 				.data(d)
 				.enter()
 				.append("circle")
 				.attr("cx", function(d){return xScale(d.S_S)})
 				.attr("cy", function(d){return yScale(d.M_S)})
-				.attr("r",3);
-			
-			//Create X axis
+				.attr("r",5)
+				.attr("fill","red")
+				.attr("stroke","black")
+				.append("title")
+				.text(function(d){return d.N;})
+			//Create X and Y Axis
 			svg.append("g")
 				.attr("class", "axis")
 				.attr("transform", "translate(0," + (h - padding) + ")")
 				.call(xAxis);
-			
-			//Create Y axis
 			svg.append("g")
 				.attr("class", "axis")
 				.attr("transform", "translate(" + padding + ",0)")
